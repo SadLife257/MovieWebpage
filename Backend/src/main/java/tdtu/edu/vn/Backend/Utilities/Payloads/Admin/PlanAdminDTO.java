@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 
 @Data
 @AllArgsConstructor
-public class PlanAdminRequest {
+public class PlanAdminDTO {
     @NotBlank
     String name;
 

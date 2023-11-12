@@ -7,8 +7,8 @@ import tdtu.edu.vn.Backend.Repositories.BillingRepo;
 import tdtu.edu.vn.Backend.Repositories.ChatRepo;
 import tdtu.edu.vn.Backend.Repositories.ReviewsRepo;
 import tdtu.edu.vn.Backend.Repositories.UsersRepo;
-import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.ReviewsAdminRequest;
-import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.UsersAdminRequest;
+import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.ReviewsAdminDTO;
+import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.UsersAdminDTO;
 import tdtu.edu.vn.Backend.Utilities.Payloads.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +55,7 @@ public class UsersAdminApi {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody UsersAdminRequest request){
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody UsersAdminDTO request){
         try{
             Optional<UsersModel> data = usersRepo.findById(id);
             if(data.isPresent()){

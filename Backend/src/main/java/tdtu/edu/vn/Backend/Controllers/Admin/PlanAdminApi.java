@@ -3,7 +3,7 @@ package tdtu.edu.vn.Backend.Controllers.Admin;
 import tdtu.edu.vn.Backend.Models.PlanModel;
 import tdtu.edu.vn.Backend.Repositories.BillingRepo;
 import tdtu.edu.vn.Backend.Repositories.PlanRepo;
-import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.PlanAdminRequest;
+import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.PlanAdminDTO;
 import tdtu.edu.vn.Backend.Utilities.Payloads.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +37,7 @@ public class PlanAdminApi {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody PlanAdminRequest request){
+    public ResponseEntity<?> create(@Valid @RequestBody PlanAdminDTO request){
         try{
             PlanModel data = new PlanModel();
             data.setName(request.getName());
@@ -52,7 +52,7 @@ public class PlanAdminApi {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody PlanAdminRequest request){
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody PlanAdminDTO request){
         try{
             Optional<PlanModel> data = planRepo.findById(id);
             if(data.isPresent()){

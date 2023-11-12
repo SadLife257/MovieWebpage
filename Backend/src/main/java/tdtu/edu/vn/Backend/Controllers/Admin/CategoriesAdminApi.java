@@ -5,7 +5,7 @@ import tdtu.edu.vn.Backend.Models.SeriesModel;
 import tdtu.edu.vn.Backend.Repositories.CategoriesRepo;
 import tdtu.edu.vn.Backend.Repositories.MoviesRepo;
 import tdtu.edu.vn.Backend.Repositories.SeriesRepo;
-import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.CategoriesAdminRequest;
+import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.CategoriesAdminDTO;
 import tdtu.edu.vn.Backend.Utilities.Payloads.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +43,7 @@ public class CategoriesAdminApi {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody CategoriesAdminRequest request){
+    public ResponseEntity<?> create(@Valid @RequestBody CategoriesAdminDTO request){
         try{
             CategoriesModel data = new CategoriesModel();
             data.setName(request.getName());
@@ -55,7 +55,7 @@ public class CategoriesAdminApi {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody CategoriesAdminRequest request){
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody CategoriesAdminDTO request){
         try{
             Optional<CategoriesModel> data = categoriesRepo.findById(id);
             if(data.isPresent()){

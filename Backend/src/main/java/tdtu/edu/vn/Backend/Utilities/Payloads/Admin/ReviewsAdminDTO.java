@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
-public class ReviewsAdminRequest {
+public class ReviewsAdminDTO {
     @NotBlank
     private String content;
 

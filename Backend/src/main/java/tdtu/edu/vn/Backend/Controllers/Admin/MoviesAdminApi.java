@@ -7,7 +7,7 @@ import tdtu.edu.vn.Backend.Repositories.CategoriesRepo;
 import tdtu.edu.vn.Backend.Repositories.MoviesRepo;
 import tdtu.edu.vn.Backend.Repositories.ReviewsRepo;
 import tdtu.edu.vn.Backend.Repositories.SeriesRepo;
-import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.MoviesAdminRequest;
+import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.MoviesAdminDTO;
 import tdtu.edu.vn.Backend.Utilities.Payloads.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +48,7 @@ public class MoviesAdminApi {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody MoviesAdminRequest request){
+    public ResponseEntity<?> create(@Valid @RequestBody MoviesAdminDTO request){
         try{
             MoviesModel data = new MoviesModel();
             data.setTitle(request.getTitle());
@@ -83,7 +83,7 @@ public class MoviesAdminApi {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody MoviesAdminRequest request){
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody MoviesAdminDTO request){
         try{
             Optional<MoviesModel> data = moviesRepo.findById(id);
             if(data.isPresent()){

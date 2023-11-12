@@ -2,26 +2,19 @@ package tdtu.edu.vn.Backend.Utilities.Payloads.Admin;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class UsersAdminRequest {
+@NoArgsConstructor
+public class SeriesAdminDTO {
     @NotBlank
-    private String name;
-
-    private String password;
-
-    @NotBlank
-    private String email;
+    String title;
 
     @NotBlank
-    private String avatar;
+    String type;
 
-    private List<String> roles;
-
-    private String vip;
-
+    List<Long> categories;
 }

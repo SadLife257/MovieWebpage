@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoriesAdminRequest {
+public class CategoriesAdminDTO {
     @NotBlank
     private String name;
 }

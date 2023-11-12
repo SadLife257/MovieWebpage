@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MoviesAdminRequest {
+public class MoviesAdminDTO {
     @NotBlank
     private String title;
 

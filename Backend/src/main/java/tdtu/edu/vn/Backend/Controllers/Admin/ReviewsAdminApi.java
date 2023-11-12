@@ -2,7 +2,7 @@ package tdtu.edu.vn.Backend.Controllers.Admin;
 
 import tdtu.edu.vn.Backend.Models.ReviewsModel;
 import tdtu.edu.vn.Backend.Repositories.ReviewsRepo;
-import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.ReviewsAdminRequest;
+import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.ReviewsAdminDTO;
 import tdtu.edu.vn.Backend.Utilities.Payloads.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +34,7 @@ public class ReviewsAdminApi {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody ReviewsAdminRequest request){
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody ReviewsAdminDTO request){
         try{
             Optional<ReviewsModel> data = reviewsRepo.findById(id);
             if(data.isPresent()){

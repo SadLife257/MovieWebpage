@@ -5,8 +5,8 @@ import tdtu.edu.vn.Backend.Models.SeriesModel;
 import tdtu.edu.vn.Backend.Repositories.CategoriesRepo;
 import tdtu.edu.vn.Backend.Repositories.MoviesRepo;
 import tdtu.edu.vn.Backend.Repositories.SeriesRepo;
-import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.CategoriesAdminRequest;
-import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.SeriesAdminRequest;
+import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.CategoriesAdminDTO;
+import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.SeriesAdminDTO;
 import tdtu.edu.vn.Backend.Utilities.Payloads.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +48,7 @@ public class SeriesAdminApi {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody SeriesAdminRequest request){
+    public ResponseEntity<?> create(@Valid @RequestBody SeriesAdminDTO request){
         try{
             SeriesModel data = new SeriesModel();
             data.setTitle(request.getTitle());
@@ -66,7 +66,7 @@ public class SeriesAdminApi {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody SeriesAdminRequest request){
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody SeriesAdminDTO request){
         try{
             Optional<SeriesModel> data = seriesRepo.findById(id);
             if(data.isPresent()){

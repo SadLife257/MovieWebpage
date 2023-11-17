@@ -7,8 +7,15 @@ import tdtu.edu.vn.Backend.Repositories.MoviesRepo;
 import tdtu.edu.vn.Backend.Repositories.SeriesRepo;
 import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.CategoriesAdminDTO;
 import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.SeriesAdminDTO;
+import tdtu.edu.vn.Backend.Utilities.Responses.Admin.CategoriesAdminResponse;
+import tdtu.edu.vn.Backend.Utilities.Responses.Admin.SeriesAdminResponse;
+import tdtu.edu.vn.Backend.Utilities.Constants;
 import tdtu.edu.vn.Backend.Utilities.Payloads.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +39,32 @@ public class SeriesAdminApi {
 
     @Autowired
     MoviesRepo  moviesRepo;
+    
+    @GetMapping
+    public ResponseEntity<?> get(
+    		@RequestParam(value = "pageNo", defaultValue = Constants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = Constants.DEFAULT_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = Constants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
+    		){
+    	Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+        Page<SeriesModel> series = seriesRepo.findAll(pageable);
+        
+        List<SeriesModel> SeriesList = series.getContent();
+        
+        SeriesAdminResponse seriesAdminResponse = new SeriesAdminResponse();
+        seriesAdminResponse.setContent(SeriesList);
+        seriesAdminResponse.setPageNo(series.getNumber());
+        seriesAdminResponse.setPageSize(series.getSize());
+        seriesAdminResponse.setTotalElements(series.getTotalElements());
+        seriesAdminResponse.setTotalPages(series.getTotalPages());
+        seriesAdminResponse.setLast(series.isLast());
+        return ResponseEntity.ok(seriesAdminResponse);
+    }
 
     @GetMapping
     public ResponseEntity<?> get(){

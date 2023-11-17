@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import tdtu.edu.vn.Backend.Models.UsersModel;
 
 @Repository
-public interface UsersRepo extends CrudRepository<UsersModel, Long> {
+public interface UsersRepo extends JpaRepository<UsersModel, Long> {
 
     UsersModel findByUsername(String username);
 

@@ -6,13 +6,22 @@ import tdtu.edu.vn.Backend.Repositories.CategoriesRepo;
 import tdtu.edu.vn.Backend.Repositories.MoviesRepo;
 import tdtu.edu.vn.Backend.Repositories.SeriesRepo;
 import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.CategoriesAdminDTO;
+import tdtu.edu.vn.Backend.Utilities.Responses.Admin.CategoriesAdminResponse;
 import tdtu.edu.vn.Backend.Utilities.Payloads.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import tdtu.edu.vn.Backend.Utilities.Constants;
+
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -27,6 +36,32 @@ public class CategoriesAdminApi {
 
     @Autowired
     MoviesRepo  moviesRepo;
+    
+    @GetMapping
+    public ResponseEntity<?> get(
+    		@RequestParam(value = "pageNo", defaultValue = Constants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = Constants.DEFAULT_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = Constants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
+    		){
+    	Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+        Page<CategoriesModel> categories = categoriesRepo.findAll(pageable);
+        
+        List<CategoriesModel> CategoryList = categories.getContent();
+        
+        CategoriesAdminResponse categoriesAdminResponse = new CategoriesAdminResponse();
+        categoriesAdminResponse.setContent(CategoryList);
+        categoriesAdminResponse.setPageNo(categories.getNumber());
+        categoriesAdminResponse.setPageSize(categories.getSize());
+        categoriesAdminResponse.setTotalElements(categories.getTotalElements());
+        categoriesAdminResponse.setTotalPages(categories.getTotalPages());
+        categoriesAdminResponse.setLast(categories.isLast());
+        return ResponseEntity.ok(categoriesAdminResponse);
+    }
 
     @GetMapping
     public ResponseEntity<?> get(){

@@ -1,11 +1,12 @@
 package tdtu.edu.vn.Backend.Repositories;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import tdtu.edu.vn.Backend.Models.MoviesModel;
 
-public interface MoviesRepo extends CrudRepository<MoviesModel, Long> {
+public interface MoviesRepo extends JpaRepository<MoviesModel, Long> {
     Iterable<MoviesModel> findByActiveTrue();
     Iterable<MoviesModel> findByActiveFalse();
     Iterable<MoviesModel> findTop5ByOrderByIdDesc();

@@ -1,5 +1,6 @@
 package tdtu.edu.vn.Backend.Controllers.Admin;
 
+import tdtu.edu.vn.Backend.Models.CategoriesModel;
 import tdtu.edu.vn.Backend.Models.MoviesModel;
 import tdtu.edu.vn.Backend.Models.ReviewsModel;
 import tdtu.edu.vn.Backend.Models.UsersModel;
@@ -9,8 +10,15 @@ import tdtu.edu.vn.Backend.Repositories.ReviewsRepo;
 import tdtu.edu.vn.Backend.Repositories.UsersRepo;
 import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.ReviewsAdminDTO;
 import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.UsersAdminDTO;
+import tdtu.edu.vn.Backend.Utilities.Responses.Admin.CategoriesAdminResponse;
+import tdtu.edu.vn.Backend.Utilities.Responses.Admin.UsersAdminResponse;
+import tdtu.edu.vn.Backend.Utilities.Constants;
 import tdtu.edu.vn.Backend.Utilities.Payloads.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +27,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -39,6 +48,32 @@ public class UsersAdminApi {
 
     @Autowired
     BillingRepo billingRepo;
+    
+    @GetMapping
+    public ResponseEntity<?> get(
+    		@RequestParam(value = "pageNo", defaultValue = Constants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = Constants.DEFAULT_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = Constants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
+    		){
+    	Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+        Page<UsersModel> users = usersRepo.findAll(pageable);
+        
+        List<UsersModel> UserList = users.getContent();
+        
+        UsersAdminResponse usersAdminResponse = new UsersAdminResponse();
+        usersAdminResponse.setContent(UserList);
+        usersAdminResponse.setPageNo(users.getNumber());
+        usersAdminResponse.setPageSize(users.getSize());
+        usersAdminResponse.setTotalElements(users.getTotalElements());
+        usersAdminResponse.setTotalPages(users.getTotalPages());
+        usersAdminResponse.setLast(users.isLast());
+        return ResponseEntity.ok(usersAdminResponse);
+    }
 
     @GetMapping
     public ResponseEntity<?> get(){

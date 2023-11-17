@@ -8,8 +8,15 @@ import tdtu.edu.vn.Backend.Repositories.MoviesRepo;
 import tdtu.edu.vn.Backend.Repositories.ReviewsRepo;
 import tdtu.edu.vn.Backend.Repositories.SeriesRepo;
 import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.MoviesAdminDTO;
+import tdtu.edu.vn.Backend.Utilities.Responses.Admin.CategoriesAdminResponse;
+import tdtu.edu.vn.Backend.Utilities.Responses.Admin.MoviesAdminResponse;
+import tdtu.edu.vn.Backend.Utilities.Constants;
 import tdtu.edu.vn.Backend.Utilities.Payloads.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +39,32 @@ public class MoviesAdminApi {
 
     @Autowired
     ReviewsRepo  reviewsRepo;
+    
+    @GetMapping
+    public ResponseEntity<?> get(
+    		@RequestParam(value = "pageNo", defaultValue = Constants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = Constants.DEFAULT_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = Constants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
+    		){
+    	Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+        Page<MoviesModel> movies = moviesRepo.findAll(pageable);
+        
+        List<MoviesModel> MovieList = movies.getContent();
+        
+        MoviesAdminResponse moviesAdminResponse = new MoviesAdminResponse();
+        moviesAdminResponse.setContent(MovieList);
+        moviesAdminResponse.setPageNo(movies.getNumber());
+        moviesAdminResponse.setPageSize(movies.getSize());
+        moviesAdminResponse.setTotalElements(movies.getTotalElements());
+        moviesAdminResponse.setTotalPages(movies.getTotalPages());
+        moviesAdminResponse.setLast(movies.isLast());
+        return ResponseEntity.ok(moviesAdminResponse);
+    }
 
     @GetMapping
     public ResponseEntity<?> get(){

@@ -8,7 +8,6 @@ import tdtu.edu.vn.Backend.Utilities.Constants;
 import tdtu.edu.vn.Backend.Utilities.Payloads.GeneralResponse;
 import tdtu.edu.vn.Backend.Utilities.Responses.Admin.BillingsAdminResponse;
 import tdtu.edu.vn.Backend.Utilities.Responses.Admin.CategoriesAdminResponse;
-import tdtu.edu.vn.Backend.Utilities.Sockets.SocketModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,9 +26,6 @@ import java.util.Optional;
 public class BillingAdminApi {
     @Autowired
     private BillingRepo billingRepo;
-
-    @Autowired
-    private SocketModule socketModule;
     
     @GetMapping
     public ResponseEntity<?> get(
@@ -57,10 +53,10 @@ public class BillingAdminApi {
         return ResponseEntity.ok(billingAdminResponse);
     }
 
-    @GetMapping
-    public ResponseEntity<?> get(){
-        return ResponseEntity.ok(billingRepo.findAll());
-    }
+//    @GetMapping
+//    public ResponseEntity<?> get(){
+//        return ResponseEntity.ok(billingRepo.findAll());
+//    }
 
     @GetMapping("{id}")
     public ResponseEntity<?> getById(@PathVariable Long id){
@@ -91,7 +87,6 @@ public class BillingAdminApi {
                 }
                 dataSave.setUsers(user);
                 dataSave = billingRepo.save(dataSave);
-                socketModule.sendEvt("billing", dataSave);
                 return ResponseEntity.ok(dataSave);
             }else{
                 return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body(new GeneralResponse(false, "not found", null));

@@ -75,10 +75,10 @@ public class UsersAdminApi {
         return ResponseEntity.ok(usersAdminResponse);
     }
 
-    @GetMapping
-    public ResponseEntity<?> get(){
-        return ResponseEntity.ok(usersRepo.findAll());
-    }
+//    @GetMapping
+//    public ResponseEntity<?> get(){
+//        return ResponseEntity.ok(usersRepo.findAll());
+//    }
 
     @GetMapping("{id}")
     public ResponseEntity<?> getById(@PathVariable Long id){

@@ -55,10 +55,10 @@ public class ReviewsAdminApi {
         return ResponseEntity.ok(reviewsAdminResponse);
     }
 
-    @GetMapping
-    public ResponseEntity<?> get(){
-        return ResponseEntity.ok(reviewsRepo.findAll());
-    }
+//    @GetMapping
+//    public ResponseEntity<?> get(){
+//        return ResponseEntity.ok(reviewsRepo.findAll());
+//    }
 
     @GetMapping("{id}")
     public ResponseEntity<?> getById(@PathVariable Long id){

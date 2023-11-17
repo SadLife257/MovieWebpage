@@ -63,10 +63,10 @@ public class CategoriesAdminApi {
         return ResponseEntity.ok(categoriesAdminResponse);
     }
 
-    @GetMapping
-    public ResponseEntity<?> get(){
-        return ResponseEntity.ok(categoriesRepo.findAll());
-    }
+//    @GetMapping
+//    public ResponseEntity<?> get(){
+//        return ResponseEntity.ok(categoriesRepo.findAll());
+//    }
 
     @GetMapping("{id}")
     public ResponseEntity<?> getById(@PathVariable Long id){

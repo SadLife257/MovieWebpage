@@ -58,10 +58,10 @@ public class PlanAdminApi {
         return ResponseEntity.ok(plansAdminResponse);
     }
 
-    @GetMapping
-    public ResponseEntity<?> get(){
-        return ResponseEntity.ok(planRepo.findAll());
-    }
+//    @GetMapping
+//    public ResponseEntity<?> get(){
+//        return ResponseEntity.ok(planRepo.findAll());
+//    }
 
     @GetMapping("{id}")
     public ResponseEntity<?> getById(@PathVariable Long id){

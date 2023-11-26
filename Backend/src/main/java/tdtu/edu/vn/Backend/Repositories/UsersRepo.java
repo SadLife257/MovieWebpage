@@ -11,7 +11,7 @@ public interface UsersRepo extends JpaRepository<UsersModel, Long> {
 
     UsersModel findByUsername(String username);
 
-//  UsersModel findByRefreshToken(String refreshToken);
+    UsersModel findByRefreshToken(String refreshToken);
 
     Iterable<UsersModel> findTop5ByOrderByIdDesc();
 }

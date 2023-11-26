@@ -2,6 +2,8 @@ package tdtu.edu.vn.Backend.Models;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tdtu.edu.vn.Backend.Utilities.JWT.JwtRefreshToken;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -30,7 +32,7 @@ public class UsersModel {
 
     private String roles = "ROLE_USER";
 
-//    private String refreshToken = (new JwtRefreshToken()).generate();
+    private String refreshToken = (new JwtRefreshToken()).generate();
 
     private Date vip;
 
@@ -56,7 +58,6 @@ public class UsersModel {
     @OneToMany(mappedBy="users", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Set<ChatModel> chat = new HashSet<>();
 
-    // fix infinite loop
     public ChatModel getChat() {
         return null;
     }
@@ -64,12 +65,10 @@ public class UsersModel {
     public Set<ChatModel> chatCustomGet() {
         return chat;
     }
-    //end fix infinite loop
 
     @OneToMany(mappedBy="users", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Set<BillingModel> billing = new HashSet<>();
 
-    // fix infinite loop
     public BillingModel getBilling() {
         return null;
     }
@@ -77,11 +76,6 @@ public class UsersModel {
     public Set<BillingModel> billingCustomGet() {
         return billing;
     }
-
-//    public int getTransactionCount() {
-//        return reviews.size();
-//    }
-    //end fix infinite loop
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

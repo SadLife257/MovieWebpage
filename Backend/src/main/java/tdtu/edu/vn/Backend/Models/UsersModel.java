@@ -41,29 +41,12 @@ public class UsersModel {
     @OneToMany(mappedBy="users", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Set<ReviewsModel> reviews = new HashSet<>();
 
-    // fix infinite loop
     public ReviewsModel getReviews() {
         return null;
     }
 
     public Set<ReviewsModel> reviewsCustomGet() {
         return reviews;
-    }
-
-//    public int getReviewsCount() {
-//        return reviews.size();
-//    }
-    //end fix infinite loop
-
-    @OneToMany(mappedBy="users", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private Set<ChatModel> chat = new HashSet<>();
-
-    public ChatModel getChat() {
-        return null;
-    }
-
-    public Set<ChatModel> chatCustomGet() {
-        return chat;
     }
 
     @OneToMany(mappedBy="users", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)

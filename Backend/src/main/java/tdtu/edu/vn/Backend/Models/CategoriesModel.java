@@ -26,7 +26,6 @@ public class CategoriesModel {
     @ManyToMany(mappedBy = "categories")
     private List<MoviesModel> movies = new ArrayList<>();
 
-    // fix infinite loop
     public SeriesModel getSeries() {
         return null;
     }
@@ -50,7 +49,6 @@ public class CategoriesModel {
     public int getMoviesCount() {
         return movies.size();
     }
-    //end fix infinite loop
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

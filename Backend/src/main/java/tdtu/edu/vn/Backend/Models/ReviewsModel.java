@@ -22,7 +22,6 @@ public class ReviewsModel {
     @JoinColumn(name="movies_id", nullable=false)
     private MoviesModel movies;
 
-    // fix infinite loop
     public MoviesModel getMovies() {
         return null;
     }
@@ -34,7 +33,6 @@ public class ReviewsModel {
     public MoviesModel moviesCustomGet() {
         return movies;
     }
-    //end fix infinite loop
 
     @ManyToOne
     @JoinColumn(name="user_id", nullable=false)

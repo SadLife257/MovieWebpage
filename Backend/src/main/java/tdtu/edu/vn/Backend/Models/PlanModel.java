@@ -30,7 +30,6 @@ public class PlanModel {
     @OneToMany(mappedBy="plan", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<BillingModel> billing = new HashSet<>();
 
-    // fix infinite loop
     public BillingModel getBilling() {
         return null;
     }
@@ -38,8 +37,6 @@ public class PlanModel {
     public Set<BillingModel> billingCustomGet() {
         return billing;
     }
-
-    //end fix infinite loop
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

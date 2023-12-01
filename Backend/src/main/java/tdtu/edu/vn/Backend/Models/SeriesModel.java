@@ -35,8 +35,7 @@ public class SeriesModel {
 
     @OneToMany(mappedBy = "series", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<MoviesModel> movies = new ArrayList<>();
-
-    // fix infinite loop
+    
     public MoviesModel getMovies() {
         return null;
     }
@@ -48,7 +47,6 @@ public class SeriesModel {
     public int getMoviesCount() {
         return movies.size();
     }
-    //end fix infinite loop
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

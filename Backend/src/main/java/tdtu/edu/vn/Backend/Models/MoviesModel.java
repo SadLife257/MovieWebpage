@@ -45,7 +45,6 @@ public class MoviesModel {
     @JoinColumn(name="series_id")
     private SeriesModel series;
 
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @ManyToMany
     @JoinTable(
             name = "movies_categories",

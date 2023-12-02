@@ -1,81 +1,92 @@
 package tdtu.edu.vn.Backend.Utilities.JWT;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import tdtu.edu.vn.Backend.Securities.CustomUserDetails;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.WebUtils;
 
+import java.security.Key;
 import java.util.Date;
-import java.util.function.Function;
 
 @Component
 @Slf4j
 public class JwtToken{
-
-//    public static final long  tokenTime = 60 * 5;
 
     @Value("${jwt.token.secret}")
     private String secret;
 
     @Value("${jwt.token.time}")
     private Long tokenTime;
+    
+    @Value("${jwt.token.cookie}")
+	private String cookieName;
 
-    // Tạo ra jwt từ thông tin user
-    public String generateToken(CustomUserDetails userDetails) {
-        // Tạo chuỗi json web token từ id của user.
-        return Jwts.builder()
-                .setSubject(userDetails.getUser().getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + tokenTime * 1000))
-                .signWith(SignatureAlgorithm.HS512, secret)
-                .compact();
-    }
+    public String getJwtFromCookies(HttpServletRequest request) {
+		Cookie cookie = WebUtils.getCookie(request, cookieName);
+		if (cookie != null) {
+			return cookie.getValue();
+		} else {
+			return null;
+		}
+	}
 
-    // Lấy thông tin user từ jwt
-    public String getUsernameFromJWT(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody();
+	public ResponseCookie generateJwtCookie(CustomUserDetails userPrincipal) {
+		String jwt = generateTokenFromUsername(userPrincipal.getUsername());
+		ResponseCookie cookie = ResponseCookie.from(cookieName, jwt).path("/auth").maxAge(24 * 60 * 60).httpOnly(true)
+				.build();
+		return cookie;
+	}
+	
+	public String generateJwtToken(CustomUserDetails userPrincipal) {
+	    return Jwts.builder()
+	        .setSubject((userPrincipal.getUsername()))
+	        .setIssuedAt(new Date())
+	        .setExpiration(new Date((new Date()).getTime() + tokenTime))
+	        .signWith(key(), SignatureAlgorithm.HS256)
+	        .compact();
+	  }
 
-        return claims.getSubject();
-    }
+	public ResponseCookie getCleanJwtCookie() {
+		ResponseCookie cookie = ResponseCookie.from(cookieName, null).path("/api/auth").build();
+		return cookie;
+	}
 
-    //retrieve expiration date from jwt token
-    public Date getExpirationDateFromToken(String token) {
-        return getClaimFromToken(token, Claims::getExpiration);
-    }
+	public String getUserNameFromJwtToken(String token) {
+		return Jwts.parser().setSigningKey(key()).build().parseClaimsJws(token).getBody().getSubject();
+	}
 
-    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = getAllClaimsFromToken(token);
-        return claimsResolver.apply(claims);
-    }
-    //for retrieveing any information from token we will need the secret key
-    public Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-    }
+	private Key key() {
+		return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+	}
 
-    //check if the token has expired
-    public Boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
-    }
+	public boolean validateJwtToken(String authToken) {
+		try {
+			Jwts.parser().setSigningKey(key()).build().parse(authToken);
+			return true;
+		} catch (MalformedJwtException e) {
+			log.error("Invalid JWT token: {}", e.getMessage());
+		} catch (ExpiredJwtException e) {
+			log.error("JWT token is expired: {}", e.getMessage());
+		} catch (UnsupportedJwtException e) {
+			log.error("JWT token is unsupported: {}", e.getMessage());
+		} catch (IllegalArgumentException e) {
+			log.error("JWT claims string is empty: {}", e.getMessage());
+		}
 
-//    public boolean validateToken(String authToken) {
-//        try {
-//            Jwts.parser().setSigningKey(secret).parseClaimsJws(authToken);
-//            return true;
-//        } catch (MalformedJwtException ex) {
-//            log.error("Invalid JWT token");
-//        } catch (ExpiredJwtException ex) {
-//            log.error("Expired JWT token");
-//        } catch (UnsupportedJwtException ex) {
-//            log.error("Unsupported JWT token");
-//        } catch (IllegalArgumentException ex) {
-//            log.error("JWT claims string is empty.");
-//        }
-//        return false;
-//    }
+		return false;
+	}
+	
+	public String generateTokenFromUsername(String username) {
+		return Jwts.builder().setSubject(username).setIssuedAt(new Date())
+				.setExpiration(new Date((new Date()).getTime() + tokenTime))
+				.signWith(key(), SignatureAlgorithm.HS256).compact();
+	}
 }

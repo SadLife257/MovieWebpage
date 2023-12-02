@@ -17,7 +17,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private JwtToken jwtToken;
@@ -28,30 +27,25 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            // Lấy jwt từ request
+
             String jwt = getJwtFromRequest(request);
-//            System.out.println("----------------");
-//            System.out.println(jwt);
-//            System.out.println("----------------");
-            if (jwt != null && StringUtils.hasText(jwt) && !jwtToken.isTokenExpired(jwt)) {
-//                System.out.println("ua alo");
-                // Lấy usernmae từ chuỗi jwt
-                String userName = jwtToken.getUsernameFromJWT(jwt);
-                // Lấy thông tin người dùng
+
+            if (jwt != null && jwtToken.validateJwtToken(jwt)) {
+
+            	String userName = jwtToken.getUserNameFromJwtToken(jwt);
+
                 UserDetails userDetails = jwtUserService.loadUserByUsername(userName);
                 if(userDetails != null) {
-                    // Nếu người dùng hợp lệ, set thông tin cho Seturity Context
+
                     UsernamePasswordAuthenticationToken
                             authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
-            }else{
-//                System.out.println("false jwt");
             }
         } catch (Exception ex) {
-//            System.out.println("error");
+        	logger.error("Cannot set user authentication: {}", ex);
         }
 
         filterChain.doFilter(request, response);
@@ -59,7 +53,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        // Kiểm tra xem header Authorization có chứa thông tin jwt không
+
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }

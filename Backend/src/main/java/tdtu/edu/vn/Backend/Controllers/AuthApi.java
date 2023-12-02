@@ -74,7 +74,7 @@ public class AuthApi {
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            String jwt = jwtToken.generateToken((CustomUserDetails) authentication.getPrincipal());
+            String jwt = jwtToken.generateJwtToken((CustomUserDetails) authentication.getPrincipal());
             UsersModel user = usersRepo.findById(((CustomUserDetails) authentication.getPrincipal()).getId()).get();
             user.setPassword(null);
             return ResponseEntity.ok(new SigninResponse(jwt, user.getRefreshToken(), user));
@@ -88,7 +88,7 @@ public class AuthApi {
         try{
             UsersModel user = usersRepo.findByRefreshToken(refreshTokenRequest.getRefreshToken());
             if(user != null){
-                String jwt = jwtToken.generateToken((CustomUserDetails) jwtUserService.loadUserByUsername(user.getUsername()));
+                String jwt = jwtToken.generateJwtToken((CustomUserDetails) jwtUserService.loadUserByUsername(user.getUsername()));
                 return ResponseEntity.ok(new RefreshTokenResponse(true, "success", jwt));
             }else{
                 return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body(new GeneralResponse(false, "Not found Token", null));
@@ -238,7 +238,7 @@ public class AuthApi {
                         )
                 );
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                String jwt = jwtToken.generateToken((CustomUserDetails) authentication.getPrincipal());
+                String jwt = jwtToken.generateJwtToken((CustomUserDetails) authentication.getPrincipal());
                 return ResponseEntity.ok(new SignupResponse(true, "success", jwt, userSave));
             }else{
                 return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body(new SignupResponse(false, "Username already exists", null, null));

@@ -28,7 +28,6 @@ import tdtu.edu.vn.Backend.Utilities.JWT.JwtUserService;
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
     @Autowired

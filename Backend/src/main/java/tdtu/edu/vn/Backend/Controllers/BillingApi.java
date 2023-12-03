@@ -14,7 +14,7 @@ import tdtu.edu.vn.Backend.Repositories.BillingRepo;
 import tdtu.edu.vn.Backend.Repositories.PlanRepo;
 import tdtu.edu.vn.Backend.Repositories.UsersRepo;
 import tdtu.edu.vn.Backend.Utilities.Payloads.GeneralResponse;
-import tdtu.edu.vn.Backend.Utilities.Payloads.Home.BillingRequest;
+import tdtu.edu.vn.Backend.Utilities.Payloads.Home.BillingDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -54,7 +54,7 @@ public class BillingApi {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody BillingRequest request){
+    public ResponseEntity<?> create(@Valid @RequestBody BillingDTO request){
         try{
             BillingModel data = new BillingModel();
             UsersModel user = usersRepo.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());

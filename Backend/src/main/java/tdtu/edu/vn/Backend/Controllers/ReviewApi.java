@@ -15,7 +15,7 @@ import tdtu.edu.vn.Backend.Repositories.ReviewsRepo;
 import tdtu.edu.vn.Backend.Repositories.UsersRepo;
 import tdtu.edu.vn.Backend.Utilities.Payloads.GeneralResponse;
 import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.ReviewsAdminDTO;
-import tdtu.edu.vn.Backend.Utilities.Payloads.Home.ReviewRequest;
+import tdtu.edu.vn.Backend.Utilities.Payloads.Home.ReviewDTO;
 
 import java.util.Optional;
 
@@ -41,7 +41,7 @@ public class ReviewApi {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody ReviewRequest request){
+    public ResponseEntity<?> create(@Valid @RequestBody ReviewDTO request){
         try{
             ReviewsModel data = new ReviewsModel();
             UsersModel user = usersRepo.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());

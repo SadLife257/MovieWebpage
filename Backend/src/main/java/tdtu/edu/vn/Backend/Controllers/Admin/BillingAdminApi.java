@@ -1,24 +1,15 @@
 package tdtu.edu.vn.Backend.Controllers.Admin;
 
 import tdtu.edu.vn.Backend.Models.BillingModel;
-import tdtu.edu.vn.Backend.Models.CategoriesModel;
 import tdtu.edu.vn.Backend.Models.UsersModel;
 import tdtu.edu.vn.Backend.Repositories.BillingRepo;
-import tdtu.edu.vn.Backend.Utilities.Constants;
 import tdtu.edu.vn.Backend.Utilities.Payloads.GeneralResponse;
-import tdtu.edu.vn.Backend.Utilities.Responses.Admin.BillingsAdminResponse;
-import tdtu.edu.vn.Backend.Utilities.Responses.Admin.CategoriesAdminResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -26,32 +17,6 @@ import java.util.Optional;
 public class BillingAdminApi {
     @Autowired
     private BillingRepo billingRepo;
-    
-//    @GetMapping
-//    public ResponseEntity<?> get(
-//    		@RequestParam(value = "pageNo", defaultValue = Constants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
-//            @RequestParam(value = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
-//            @RequestParam(value = "sortBy", defaultValue = Constants.DEFAULT_SORT_BY, required = false) String sortBy,
-//            @RequestParam(value = "sortDir", defaultValue = Constants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
-//    		){
-//    	Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
-//                : Sort.by(sortBy).descending();
-//
-//        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-//
-//        Page<BillingModel> billings = billingRepo.findAll(pageable);
-//        
-//        List<BillingModel> BillingList = billings.getContent();
-//        
-//        BillingsAdminResponse billingAdminResponse = new BillingsAdminResponse();
-//        billingAdminResponse.setContent(BillingList);
-//        billingAdminResponse.setPageNo(billings.getNumber());
-//        billingAdminResponse.setPageSize(billings.getSize());
-//        billingAdminResponse.setTotalElements(billings.getTotalElements());
-//        billingAdminResponse.setTotalPages(billings.getTotalPages());
-//        billingAdminResponse.setLast(billings.isLast());
-//        return ResponseEntity.ok(billingAdminResponse);
-//    }
 
     @GetMapping
     public ResponseEntity<?> get(){

@@ -1,16 +1,17 @@
 package tdtu.edu.vn.Backend.Repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import tdtu.edu.vn.Backend.Models.BillingModel;
 import tdtu.edu.vn.Backend.Models.UsersModel;
 
 import java.util.List;
 
-public interface BillingRepo extends JpaRepository<BillingModel, Long> {
+@Repository
+public interface BillingRepo extends CrudRepository<BillingModel, Long> {
     List<BillingModel> findByUsers(UsersModel user);
     Iterable<BillingModel> findTop5ByOrderByIdDesc();
 

@@ -19,18 +19,18 @@ import java.util.function.Function;
 
 @Component
 @Slf4j
-public class JwtToken{
+public class JwtToken {
 
-    @Value("${jwt.token.secret}")
-    private String secret;
+	@Value("${jwt.token.secret}")
+	private String secret;
 
-    @Value("${jwt.token.time}")
-    private Long tokenTime;
-    
-    @Value("${jwt.token.cookie}")
+	@Value("${jwt.token.time}")
+	private Long tokenTime;
+	
+	@Value("${jwt.token.cookie}")
 	private String cookieName;
 
-    public String getJwtFromCookies(HttpServletRequest request) {
+	public String getJwtFromCookies(HttpServletRequest request) {
 		Cookie cookie = WebUtils.getCookie(request, cookieName);
 		if (cookie != null) {
 			return cookie.getValue();
@@ -45,15 +45,12 @@ public class JwtToken{
 				.build();
 		return cookie;
 	}
-	
+
 	public String generateJwtToken(CustomUserDetails userPrincipal) {
-	    return Jwts.builder()
-	        .setSubject((userPrincipal.getUsername()))
-	        .setIssuedAt(new Date())
-	        .setExpiration(new Date((new Date()).getTime() + tokenTime))
-	        .signWith(key(), SignatureAlgorithm.HS256)
-	        .compact();
-	  }
+		return Jwts.builder().setSubject((userPrincipal.getUsername())).setIssuedAt(new Date())
+				.setExpiration(new Date((new Date()).getTime() + tokenTime)).signWith(key(), SignatureAlgorithm.HS256)
+				.compact();
+	}
 
 	public ResponseCookie getCleanJwtCookie() {
 		ResponseCookie cookie = ResponseCookie.from(cookieName, null).path("/api/auth").build();
@@ -67,7 +64,7 @@ public class JwtToken{
 	private Key key() {
 		return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
 	}
-	
+
 	public boolean validateJwtToken(String authToken) {
 		try {
 			Jwts.parser().setSigningKey(key()).build().parse(authToken);
@@ -84,10 +81,11 @@ public class JwtToken{
 
 		return false;
 	}
-	
+
 	public String generateTokenFromUsername(String username) {
 		return Jwts.builder().setSubject(username).setIssuedAt(new Date())
-				.setExpiration(new Date((new Date()).getTime() + tokenTime))
-				.signWith(key(), SignatureAlgorithm.HS256).compact();
+				.setExpiration(new Date((new Date()).getTime() + tokenTime)).signWith(key(), SignatureAlgorithm.HS256)
+				.compact();
 	}
+
 }

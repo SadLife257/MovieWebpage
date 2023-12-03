@@ -5,25 +5,17 @@ import tdtu.edu.vn.Backend.Repositories.BillingRepo;
 import tdtu.edu.vn.Backend.Repositories.ReviewsRepo;
 import tdtu.edu.vn.Backend.Repositories.UsersRepo;
 import tdtu.edu.vn.Backend.Utilities.Payloads.Admin.UsersAdminDTO;
-import tdtu.edu.vn.Backend.Utilities.Responses.Admin.UsersAdminResponse;
-import tdtu.edu.vn.Backend.Utilities.Constants;
 import tdtu.edu.vn.Backend.Utilities.JWT.JwtRefreshToken;
 import tdtu.edu.vn.Backend.Utilities.Payloads.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -42,32 +34,6 @@ public class UsersAdminApi {
     @Autowired
     BillingRepo billingRepo;
     
-//    @GetMapping
-//    public ResponseEntity<?> get(
-//    		@RequestParam(value = "pageNo", defaultValue = Constants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
-//            @RequestParam(value = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
-//            @RequestParam(value = "sortBy", defaultValue = Constants.DEFAULT_SORT_BY, required = false) String sortBy,
-//            @RequestParam(value = "sortDir", defaultValue = Constants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
-//    		){
-//    	Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
-//                : Sort.by(sortBy).descending();
-//
-//        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-//
-//        Page<UsersModel> users = usersRepo.findAll(pageable);
-//        
-//        List<UsersModel> UserList = users.getContent();
-//        
-//        UsersAdminResponse usersAdminResponse = new UsersAdminResponse();
-//        usersAdminResponse.setContent(UserList);
-//        usersAdminResponse.setPageNo(users.getNumber());
-//        usersAdminResponse.setPageSize(users.getSize());
-//        usersAdminResponse.setTotalElements(users.getTotalElements());
-//        usersAdminResponse.setTotalPages(users.getTotalPages());
-//        usersAdminResponse.setLast(users.isLast());
-//        return ResponseEntity.ok(usersAdminResponse);
-//    }
-
     @GetMapping
     public ResponseEntity<?> get(){
         return ResponseEntity.ok(usersRepo.findAll());
@@ -90,8 +56,7 @@ public class UsersAdminApi {
                 UsersModel dataSave = data.get();
                 dataSave.setName(request.getName());
                 if(request.getPassword() != null){
-                    //dataSave.setPassword(passwordEncoder.encode(request.getPassword()));
-                    dataSave.setPassword(request.getPassword());
+                    dataSave.setPassword(passwordEncoder.encode(request.getPassword()));
                 }
                 dataSave.setEmail(request.getEmail());
                 dataSave.setAvatar(request.getAvatar());

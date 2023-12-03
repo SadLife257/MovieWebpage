@@ -1,10 +1,11 @@
 package tdtu.edu.vn.Backend.Repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import tdtu.edu.vn.Backend.Models.ReviewsModel;
 
-public interface ReviewsRepo extends JpaRepository<ReviewsModel, Long> {
+@Repository
+public interface ReviewsRepo extends CrudRepository<ReviewsModel, Long> {
 
 }

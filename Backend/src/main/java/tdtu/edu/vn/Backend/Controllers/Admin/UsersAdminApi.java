@@ -42,36 +42,36 @@ public class UsersAdminApi {
     @Autowired
     BillingRepo billingRepo;
     
-    @GetMapping
-    public ResponseEntity<?> get(
-    		@RequestParam(value = "pageNo", defaultValue = Constants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = Constants.DEFAULT_SORT_BY, required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = Constants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
-    		){
-    	Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-
-        Page<UsersModel> users = usersRepo.findAll(pageable);
-        
-        List<UsersModel> UserList = users.getContent();
-        
-        UsersAdminResponse usersAdminResponse = new UsersAdminResponse();
-        usersAdminResponse.setContent(UserList);
-        usersAdminResponse.setPageNo(users.getNumber());
-        usersAdminResponse.setPageSize(users.getSize());
-        usersAdminResponse.setTotalElements(users.getTotalElements());
-        usersAdminResponse.setTotalPages(users.getTotalPages());
-        usersAdminResponse.setLast(users.isLast());
-        return ResponseEntity.ok(usersAdminResponse);
-    }
-
 //    @GetMapping
-//    public ResponseEntity<?> get(){
-//        return ResponseEntity.ok(usersRepo.findAll());
+//    public ResponseEntity<?> get(
+//    		@RequestParam(value = "pageNo", defaultValue = Constants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+//            @RequestParam(value = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+//            @RequestParam(value = "sortBy", defaultValue = Constants.DEFAULT_SORT_BY, required = false) String sortBy,
+//            @RequestParam(value = "sortDir", defaultValue = Constants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
+//    		){
+//    	Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+//                : Sort.by(sortBy).descending();
+//
+//        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+//
+//        Page<UsersModel> users = usersRepo.findAll(pageable);
+//        
+//        List<UsersModel> UserList = users.getContent();
+//        
+//        UsersAdminResponse usersAdminResponse = new UsersAdminResponse();
+//        usersAdminResponse.setContent(UserList);
+//        usersAdminResponse.setPageNo(users.getNumber());
+//        usersAdminResponse.setPageSize(users.getSize());
+//        usersAdminResponse.setTotalElements(users.getTotalElements());
+//        usersAdminResponse.setTotalPages(users.getTotalPages());
+//        usersAdminResponse.setLast(users.isLast());
+//        return ResponseEntity.ok(usersAdminResponse);
 //    }
+
+    @GetMapping
+    public ResponseEntity<?> get(){
+        return ResponseEntity.ok(usersRepo.findAll());
+    }
 
     @GetMapping("{id}")
     public ResponseEntity<?> getById(@PathVariable Long id){

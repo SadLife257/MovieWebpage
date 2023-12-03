@@ -78,6 +78,7 @@ public class AuthApi {
             String jwt = jwtToken.generateJwtToken((CustomUserDetails) authentication.getPrincipal());
             UsersModel user = usersRepo.findById(((CustomUserDetails) authentication.getPrincipal()).getId()).get();
             user.setPassword(null);
+            System.out.println(jwt);
             return ResponseEntity.ok(new SigninResponse(jwt, user.getRefreshToken(), user));
         }catch (Exception ex){
             return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body(new GeneralResponse(false, ex.getMessage(), null));

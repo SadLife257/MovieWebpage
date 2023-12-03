@@ -15,6 +15,7 @@ import org.springframework.web.util.WebUtils;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.function.Function;
 
 @Component
 @Slf4j
@@ -66,7 +67,7 @@ public class JwtToken{
 	private Key key() {
 		return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
 	}
-
+	
 	public boolean validateJwtToken(String authToken) {
 		try {
 			Jwts.parser().setSigningKey(key()).build().parse(authToken);

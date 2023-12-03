@@ -32,36 +32,36 @@ public class PlanAdminApi {
     @Autowired
     BillingRepo  billingRepo;
     
-    @GetMapping
-    public ResponseEntity<?> get(
-    		@RequestParam(value = "pageNo", defaultValue = Constants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = Constants.DEFAULT_SORT_BY, required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = Constants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
-    		){
-    	Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-
-        Page<PlanModel> plans = planRepo.findAll(pageable);
-        
-        List<PlanModel> PlanList = plans.getContent();
-        
-        PlansAdminResponse plansAdminResponse = new PlansAdminResponse();
-        plansAdminResponse.setContent(PlanList);
-        plansAdminResponse.setPageNo(plans.getNumber());
-        plansAdminResponse.setPageSize(plans.getSize());
-        plansAdminResponse.setTotalElements(plans.getTotalElements());
-        plansAdminResponse.setTotalPages(plans.getTotalPages());
-        plansAdminResponse.setLast(plans.isLast());
-        return ResponseEntity.ok(plansAdminResponse);
-    }
-
 //    @GetMapping
-//    public ResponseEntity<?> get(){
-//        return ResponseEntity.ok(planRepo.findAll());
+//    public ResponseEntity<?> get(
+//    		@RequestParam(value = "pageNo", defaultValue = Constants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+//            @RequestParam(value = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+//            @RequestParam(value = "sortBy", defaultValue = Constants.DEFAULT_SORT_BY, required = false) String sortBy,
+//            @RequestParam(value = "sortDir", defaultValue = Constants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
+//    		){
+//    	Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+//                : Sort.by(sortBy).descending();
+//
+//        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+//
+//        Page<PlanModel> plans = planRepo.findAll(pageable);
+//        
+//        List<PlanModel> PlanList = plans.getContent();
+//        
+//        PlansAdminResponse plansAdminResponse = new PlansAdminResponse();
+//        plansAdminResponse.setContent(PlanList);
+//        plansAdminResponse.setPageNo(plans.getNumber());
+//        plansAdminResponse.setPageSize(plans.getSize());
+//        plansAdminResponse.setTotalElements(plans.getTotalElements());
+//        plansAdminResponse.setTotalPages(plans.getTotalPages());
+//        plansAdminResponse.setLast(plans.isLast());
+//        return ResponseEntity.ok(plansAdminResponse);
 //    }
+
+    @GetMapping
+    public ResponseEntity<?> get(){
+        return ResponseEntity.ok(planRepo.findAll());
+    }
 
     @GetMapping("{id}")
     public ResponseEntity<?> getById(@PathVariable Long id){

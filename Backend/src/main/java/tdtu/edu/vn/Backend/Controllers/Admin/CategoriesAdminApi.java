@@ -37,36 +37,36 @@ public class CategoriesAdminApi {
     @Autowired
     MoviesRepo  moviesRepo;
     
-    @GetMapping
-    public ResponseEntity<?> get(
-    		@RequestParam(value = "pageNo", defaultValue = Constants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = Constants.DEFAULT_SORT_BY, required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = Constants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
-    		){
-    	Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-
-        Page<CategoriesModel> categories = categoriesRepo.findAll(pageable);
-        
-        List<CategoriesModel> CategoryList = categories.getContent();
-        
-        CategoriesAdminResponse categoriesAdminResponse = new CategoriesAdminResponse();
-        categoriesAdminResponse.setContent(CategoryList);
-        categoriesAdminResponse.setPageNo(categories.getNumber());
-        categoriesAdminResponse.setPageSize(categories.getSize());
-        categoriesAdminResponse.setTotalElements(categories.getTotalElements());
-        categoriesAdminResponse.setTotalPages(categories.getTotalPages());
-        categoriesAdminResponse.setLast(categories.isLast());
-        return ResponseEntity.ok(categoriesAdminResponse);
-    }
-
 //    @GetMapping
-//    public ResponseEntity<?> get(){
-//        return ResponseEntity.ok(categoriesRepo.findAll());
+//    public ResponseEntity<?> get(
+//    		@RequestParam(value = "pageNo", defaultValue = Constants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+//            @RequestParam(value = "pageSize", defaultValue = Constants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+//            @RequestParam(value = "sortBy", defaultValue = Constants.DEFAULT_SORT_BY, required = false) String sortBy,
+//            @RequestParam(value = "sortDir", defaultValue = Constants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
+//    		){
+//    	Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+//                : Sort.by(sortBy).descending();
+//
+//        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+//
+//        Page<CategoriesModel> categories = categoriesRepo.findAll(pageable);
+//        
+//        List<CategoriesModel> CategoryList = categories.getContent();
+//        
+//        CategoriesAdminResponse categoriesAdminResponse = new CategoriesAdminResponse();
+//        categoriesAdminResponse.setContent(CategoryList);
+//        categoriesAdminResponse.setPageNo(categories.getNumber());
+//        categoriesAdminResponse.setPageSize(categories.getSize());
+//        categoriesAdminResponse.setTotalElements(categories.getTotalElements());
+//        categoriesAdminResponse.setTotalPages(categories.getTotalPages());
+//        categoriesAdminResponse.setLast(categories.isLast());
+//        return ResponseEntity.ok(categoriesAdminResponse);
 //    }
+
+    @GetMapping
+    public ResponseEntity<?> get(){
+        return ResponseEntity.ok(categoriesRepo.findAll());
+    }
 
     @GetMapping("{id}")
     public ResponseEntity<?> getById(@PathVariable Long id){
